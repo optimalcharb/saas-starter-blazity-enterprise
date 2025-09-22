@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-typescript-next",
+    "ms-playwright.playwright",
+    "ms-ossdata.vscode-pgsql",
+    "vivaxy.vscode-conventional-commits",
+  ]
+}
