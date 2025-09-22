@@ -1,43 +1,35 @@
-'use client';
+"use client"
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Lock, Trash2, Loader2 } from 'lucide-react';
-import { useActionState } from 'react';
-import { updatePassword, deleteAccount } from '@/app/(login)/actions';
+import { Loader2, Lock, Trash2 } from "lucide-react"
+import { useActionState } from "react"
+import { deleteAccount, updatePassword } from "@/app/(login)/actions"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 type PasswordState = {
-  currentPassword?: string;
-  newPassword?: string;
-  confirmPassword?: string;
-  error?: string;
-  success?: string;
-};
+  currentPassword?: string
+  newPassword?: string
+  confirmPassword?: string
+  error?: string
+  success?: string
+}
 
 type DeleteState = {
-  password?: string;
-  error?: string;
-  success?: string;
-};
+  password?: string
+  error?: string
+  success?: string
+}
 
 export default function SecurityPage() {
-  const [passwordState, passwordAction, isPasswordPending] = useActionState<
-    PasswordState,
-    FormData
-  >(updatePassword, {});
+  const [passwordState, passwordAction, isPasswordPending] = useActionState<PasswordState, FormData>(updatePassword, {})
 
-  const [deleteState, deleteAction, isDeletePending] = useActionState<
-    DeleteState,
-    FormData
-  >(deleteAccount, {});
+  const [deleteState, deleteAction, isDeletePending] = useActionState<DeleteState, FormData>(deleteAccount, {})
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium bold text-gray-900 mb-6">
-        Security Settings
-      </h1>
+      <h1 className="bold mb-6 text-lg font-medium text-gray-900 lg:text-2xl">Security Settings</h1>
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Password</CardTitle>
@@ -88,17 +80,9 @@ export default function SecurityPage() {
                 defaultValue={passwordState.confirmPassword}
               />
             </div>
-            {passwordState.error && (
-              <p className="text-red-500 text-sm">{passwordState.error}</p>
-            )}
-            {passwordState.success && (
-              <p className="text-green-500 text-sm">{passwordState.success}</p>
-            )}
-            <Button
-              type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
-              disabled={isPasswordPending}
-            >
+            {passwordState.error && <p className="text-sm text-red-500">{passwordState.error}</p>}
+            {passwordState.success && <p className="text-sm text-green-500">{passwordState.success}</p>}
+            <Button type="submit" className="bg-orange-500 text-white hover:bg-orange-600" disabled={isPasswordPending}>
               {isPasswordPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -120,9 +104,7 @@ export default function SecurityPage() {
           <CardTitle>Delete Account</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-500 mb-4">
-            Account deletion is non-reversable. Please proceed with caution.
-          </p>
+          <p className="mb-4 text-sm text-gray-500">Account deletion is non-reversable. Please proceed with caution.</p>
           <form action={deleteAction} className="space-y-4">
             <div>
               <Label htmlFor="delete-password" className="mb-2">
@@ -138,9 +120,7 @@ export default function SecurityPage() {
                 defaultValue={deleteState.password}
               />
             </div>
-            {deleteState.error && (
-              <p className="text-red-500 text-sm">{deleteState.error}</p>
-            )}
+            {deleteState.error && <p className="text-sm text-red-500">{deleteState.error}</p>}
             <Button
               type="submit"
               variant="destructive"
@@ -163,5 +143,5 @@ export default function SecurityPage() {
         </CardContent>
       </Card>
     </section>
-  );
+  )
 }
