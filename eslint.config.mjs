@@ -74,6 +74,7 @@ export default [
     files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
     rules: {
       ...storybookPlugin.configs.recommended.overrides[0].rules,
+      "storybook/no-renderer-packages": "off",
     },
   },
 ];
