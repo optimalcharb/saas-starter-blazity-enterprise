@@ -21,17 +21,21 @@ jobs:
         with:
           node-version: "${{ env.node_version }}"
 
-      - name: "Install pnpm & dependencies"
+      - name: "Setup pnpm"
         uses: pnpm/action-setup@v4
-        with:
-          run_install: 'install --frozen-lockfile'
+
+      - name: "Install dependencies"
+        run: pnpm install --frozen-lockfile
 
       - name: Lint check
         run: pnpm run lint
+
       - name: Format check
         run: pnpm run prettier
+
       - name: Unit & Integration tests
         run: pnpm run test
+        
       - name: Smoke & Acceptance tests
         run: |
           pnpm run build-storybook --quiet
