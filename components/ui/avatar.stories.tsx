@@ -1,18 +1,15 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react"
-import React from "react"
+import { Meta, StoryObj } from "@storybook/react"
 
 import { Avatar } from "./avatar"
 
-export default {
+const meta: Meta<typeof Avatar> = {
   title: "Components/Avatar",
   component: Avatar,
-  args: {
-    ref: "Ref<HTMLSpanElement>" as unknown as any,
-    key: "Key" as unknown as any,
-  },
-} as ComponentMeta<typeof Avatar>
+  args: {},
+}
 
-const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />
+export default meta
 
-export const Story = Template.bind({})
-Story.args = {}
+type Story = StoryObj<typeof Avatar>
+
+export const Default: Story = {}

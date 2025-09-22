@@ -3,7 +3,7 @@
 import { CircleIcon, Home, LogOut } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Suspense, use, useState } from "react"
+import { Suspense, useState } from "react"
 import useSWR, { BareFetcher, mutate } from "swr"
 import { signOut } from "@/app/(login)/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,7 +11,11 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { User } from "@/lib/db/schema"
 
-const fetcher: BareFetcher<User> = (url: string) => fetch(url).then((res) => res.json())
+const fetcher: BareFetcher<User> = async (url: string): Promise<User> => {
+  const res = await fetch(url)
+  const data = await res.json()
+  return data as User
+}
 
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

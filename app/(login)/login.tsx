@@ -15,9 +15,13 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
   const redirect = searchParams.get("redirect")
   const priceId = searchParams.get("priceId")
   const inviteId = searchParams.get("inviteId")
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(mode === "signin" ? signIn : signUp, {
-    error: "",
-  })
+  const [state, formAction, pending] = useActionState<ActionState, FormData>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mode === "signin" ? (signIn as any) : (signUp as any),
+    {
+      error: "",
+    }
+  )
 
   return (
     <div className="flex min-h-[100dvh] flex-col justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
@@ -45,7 +49,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                 name="email"
                 type="email"
                 autoComplete="email"
-                defaultValue={state.email}
+                defaultValue={state.email as string}
                 required
                 maxLength={50}
                 className="relative block w-full appearance-none rounded-full border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:ring-orange-500 focus:outline-none sm:text-sm"
@@ -64,7 +68,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                 name="password"
                 type="password"
                 autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                defaultValue={state.password}
+                defaultValue={state.password as string}
                 required
                 minLength={8}
                 maxLength={100}

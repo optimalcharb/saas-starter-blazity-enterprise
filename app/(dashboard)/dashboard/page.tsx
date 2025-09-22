@@ -2,9 +2,9 @@
 
 import { Loader2, PlusCircle } from "lucide-react"
 import { Suspense, useActionState } from "react"
-import useSWR from "swr"
+import useSWR, { BareFetcher } from "swr"
 import { inviteTeamMember, removeTeamMember } from "@/app/(login)/actions"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,7 +18,11 @@ type ActionState = {
   success?: string
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetcher: BareFetcher<any> = async (url: string) => {
+  const res = await fetch(url)
+  return res.json()
+}
 
 function SubscriptionSkeleton() {
   return (

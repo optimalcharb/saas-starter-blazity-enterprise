@@ -4,7 +4,7 @@ import { getTeamByStripeCustomerId, getUser, updateTeamSubscription } from "@/li
 import { Team } from "@/lib/db/schema"
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-04-30.basil",
+  apiVersion: "2025-08-27.basil",
 })
 
 export async function createCheckoutSession({ team, priceId }: { team: Team | null; priceId: string }) {
@@ -45,7 +45,7 @@ export async function createCustomerPortalSession(team: Team) {
   const configurations = await stripe.billingPortal.configurations.list()
 
   if (configurations.data.length > 0) {
-    configuration = configurations.data[0]
+    configuration = configurations.data[0]!
   } else {
     const product = await stripe.products.retrieve(team.stripeProductId)
     if (!product.active) {

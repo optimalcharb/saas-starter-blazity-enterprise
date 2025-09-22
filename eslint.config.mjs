@@ -1,57 +1,46 @@
-import * as fs from "fs"
+import nextPlugin from '@next/eslint-plugin-next';
+import importPlugin from 'eslint-plugin-import';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import storybookPlugin from 'eslint-plugin-storybook';
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptEslintParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
 
-import eslintPluginImport from "eslint-plugin-import"
-import eslintPluginNext from "@next/eslint-plugin-next"
-import eslintPluginStorybook from "eslint-plugin-storybook"
-import typescriptEslint from "typescript-eslint"
-
-const eslintIgnore = [
-  ".git/",
-  ".next/",
-  "node_modules/",
-  "dist/",
-  "build/",
-  "coverage/",
-  "*.min.js",
-  "*.config.js",
-  "*.d.ts",
-]
-
-const config = typescriptEslint.config(
+export default [
   {
-    ignores: eslintIgnore,
+    ignores: ['.next/**', 'node_modules/**', '.storybook-out/**', 'dist/**', 'build/**'],
   },
-  ...eslintPluginStorybook.configs["flat/recommended"],
-  typescriptEslint.configs.recommended,
-  eslintPluginImport.flatConfigs.recommended,
+  // Base ESLint recommended rules
   {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
     plugins: {
-      "@next/next": eslintPluginNext,
+      import: importPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+      '@typescript-eslint': typescriptEslintPlugin,
+      '@next/next': nextPlugin,
+      storybook: storybookPlugin,
     },
-    rules: {
-      ...eslintPluginNext.configs.recommended.rules,
-      ...eslintPluginNext.configs["core-web-vitals"].rules,
-    },
-  },
-  {
-    settings: {
-      tailwindcss: {
-        callees: ["classnames", "clsx", "ctl", "cn", "cva"],
-      },
-
-      "import/resolver": {
-        typescript: true,
-        node: true,
-      },
-    },
-    rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+    languageOptions: {
+      parser: typescriptEslintParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
         },
-      ],
+      },
+    },
+    rules: {
+      ...reactPlugin.configs.flat.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+      ...typescriptEslintPlugin.configs.recommended.rules,
+      ...importPlugin.configs.recommended.rules,
+      ...prettierConfig.rules,
+      'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform
       "sort-imports": [
         "error",
         {
@@ -59,46 +48,32 @@ const config = typescriptEslint.config(
           ignoreDeclarationSort: true,
         },
       ],
-      "import/order": [
-        "warn",
-        {
-          groups: ["external", "builtin", "internal", "sibling", "parent", "index"],
-          pathGroups: [
-            ...getDirectoriesToSort().map((singleDir) => ({
-              pattern: `${singleDir}/**`,
-              group: "internal",
-            })),
-            {
-              pattern: "env",
-              group: "internal",
-            },
-            {
-              pattern: "theme",
-              group: "internal",
-            },
-            {
-              pattern: "public/**",
-              group: "internal",
-              position: "after",
-            },
-          ],
-          pathGroupsExcludedImportTypes: ["internal"],
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
-        },
-      ],
     },
-  }
-)
-
-function getDirectoriesToSort() {
-  const ignoredSortingDirectories = [".git", ".next", ".vscode", "node_modules"]
-  return fs
-    .readdirSync(process.cwd())
-    .filter((file) => fs.statSync(process.cwd() + "/" + file).isDirectory())
-    .filter((f) => !ignoredSortingDirectories.includes(f))
-}
-
-export default config
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
+    },
+  },
+  // Next.js specific configuration
+  {
+    files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_',
+        varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_",}],
+    },
+  },
+  // Storybook specific configuration
+  {
+    files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
+    rules: {
+      ...storybookPlugin.configs.recommended.overrides[0].rules,
+    },
+  },
+];

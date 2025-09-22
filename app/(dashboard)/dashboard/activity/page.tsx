@@ -103,7 +103,7 @@ export default async function ActivityPage() {
               <AlertCircle className="mb-4 h-12 w-12 text-orange-500" />
               <h3 className="mb-2 text-lg font-semibold text-gray-900">No activity yet</h3>
               <p className="max-w-sm text-sm text-gray-500">
-                When you perform actions like signing in or updating your account, they'll appear here.
+                When you perform actions like signing in or updating your account, they&apos;ll appear here.
               </p>
             </div>
           )}

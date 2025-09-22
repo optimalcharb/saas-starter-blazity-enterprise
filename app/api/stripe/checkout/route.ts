@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         teamId: teamMembers.teamId,
       })
       .from(teamMembers)
-      .where(eq(teamMembers.userId, user[0].id))
+      .where(eq(teamMembers.userId, user[0]!.id))
       .limit(1)
 
     if (userTeam.length === 0) {
@@ -83,9 +83,9 @@ export async function GET(request: NextRequest) {
         subscriptionStatus: subscription.status,
         updatedAt: new Date(),
       })
-      .where(eq(teams.id, userTeam[0].teamId))
+      .where(eq(teams.id, userTeam[0]!.teamId))
 
-    await setSession(user[0])
+    await setSession(user[0]!)
     return NextResponse.redirect(new URL("/dashboard", request.url))
   } catch (error) {
     console.error("Error handling successful checkout:", error)

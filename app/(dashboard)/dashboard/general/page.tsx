@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react"
 import { Suspense, useActionState } from "react"
-import useSWR from "swr"
+import useSWR, { BareFetcher } from "swr"
 import { updateAccount } from "@/app/(login)/actions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,7 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { User } from "@/lib/db/schema"
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+const fetcher: BareFetcher<User> = async (url: string): Promise<User> => {
+  const res = await fetch(url)
+  const data = await res.json()
+  return data as User
+}
 
 type ActionState = {
   name?: string

@@ -65,8 +65,8 @@ async function seed() {
     .returning()
 
   await db.insert(teamMembers).values({
-    teamId: team.id,
-    userId: user.id,
+    teamId: team!.id,
+    userId: user!.id,
     role: "owner",
   })
 

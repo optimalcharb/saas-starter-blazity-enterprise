@@ -63,7 +63,9 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     }
   }
 
-  const { user: foundUser, team: foundTeam } = userWithTeam[0]
+  const found = userWithTeam[0]!
+  const foundUser = found.user
+  const foundTeam = found.team
 
   const isPasswordValid = await comparePasswords(password, foundUser.passwordHash)
 
@@ -144,8 +146,9 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
       await db.update(invitations).set({ status: "accepted" }).where(eq(invitations.id, invitation.id))
 
       await logActivity(teamId, createdUser.id, ActivityType.ACCEPT_INVITATION)
-
-      ;[createdTeam] = await db.select().from(teams).where(eq(teams.id, teamId)).limit(1)
+      ;[createdTeam] = (await db.select().from(teams).where(eq(teams.id, teamId)).limit(1)) as [
+        typeof teams.$inferSelect,
+      ]
     } else {
       return { error: "Invalid or expired invitation.", email, password }
     }
@@ -155,7 +158,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
       name: `${email}'s Team`,
     }
 
-    ;[createdTeam] = await db.insert(teams).values(newTeam).returning()
+    ;[createdTeam] = (await db.insert(teams).values(newTeam).returning()) as [typeof teams.$inferSelect]
 
     if (!createdTeam) {
       return {
