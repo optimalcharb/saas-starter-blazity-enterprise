@@ -9,9 +9,8 @@ import prettierConfig from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: ['.next/**', 'node_modules/**', '.storybook-out/**', 'dist/**', 'build/**'],
+    ignores: ['.next/**', 'node_modules/**', 'storybook-static/**', 'dist/**', 'build/**'],
   },
-  // Base ESLint recommended rules
   {
     files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
     plugins: {
@@ -60,7 +59,7 @@ export default [
       },
     },
   },
-  // Next.js specific configuration
+  // Next.js config
   {
     files: ['**/*.js', '**/*.ts', '**/*.tsx'],
     rules: {
@@ -69,7 +68,7 @@ export default [
         varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_",}],
     },
   },
-  // Storybook specific configuration
+  // Storybook config
   {
     files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
     rules: {

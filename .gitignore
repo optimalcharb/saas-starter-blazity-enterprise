@@ -1,15 +1,12 @@
 # dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
-
-# testing
-coverage
 
 # next.js
 .next/
 out/
-build
+build/
 
 # misc
 .DS_Store
@@ -24,10 +21,11 @@ yarn-error.log*
 # local env files
 .env
 storybook-static/
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/.npm-only-allow
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+.npm-only-allow
 
 # typescript
 *.tsbuildinfo
